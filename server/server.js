@@ -6,6 +6,10 @@ var { User } = require("./models/users");
 var { Todo } = require("./models/todos");
 
 var app = express();
+var port = process.env.PORT || 3000;
+// app.get("/", (req, res) => {
+//   res.send("welcome to the homepage");
+// });
 
 app.use(bodyParser.json());
 app.post("/todos", (req, res) => {
@@ -58,11 +62,20 @@ app.get("/todos/:id", (req, res) => {
       res.status(400).send(e);
     }
   );
-  //res.send(req.params);
+});
+app.delete("/todos/:id", (req, res) => {
+  var id = req.params.id;
+  Todo.findByIdAndRemove(id)
+    .then(result => {
+      res.send(result);
+    })
+    .catch(e => {
+      res.status(400).send(e);
+    });
 });
 
 module.exports = { app };
 
-app.listen(3000, () => {
-  console.log("app started");
+app.listen(port, () => {
+  console.log(`app started at port ${port}`);
 });
