@@ -17,8 +17,8 @@ app.post("/todos", (req, res) => {
     .then(doc => {
       res.send(doc);
     })
-    .catch(() => {
-      console.log("error");
+    .catch(e => {
+      console.log(e);
     });
 });
 
@@ -45,6 +45,20 @@ app.get("/todos", (req, res) => {
       res.status(400).send(e);
     }
   );
+});
+
+app.get("/todos/:id", (req, res) => {
+  Todo.find({
+    _id: req.params.id
+  }).then(
+    todo => {
+      res.send({ todo });
+    },
+    e => {
+      res.status(400).send(e);
+    }
+  );
+  //res.send(req.params);
 });
 
 module.exports = { app };
